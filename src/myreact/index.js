@@ -41,8 +41,22 @@ function render(vdom, container) {
   container.appendChild(dom);
 }
 
+// 下一个单元任务
+let nextUnitOfWork = null;
+
 // 调度我们的diff或者render任务
-function workLoop(deadline) {}
+function workLoop(deadline) {
+  // 判断是否有下一个任务或者当前帧是否结束
+  if (nextUnitOfWork && deadline.timeRemaining() > 1) {
+    // 获取下一个单元任务
+    nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+  }
+
+  requestIdleCallback(workLoop);
+}
+
+// 获取下一个任务
+function performUnitOfWork(fiber) {}
 
 requestIdleCallback(workLoop);
 
